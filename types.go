@@ -51,7 +51,7 @@ type Page struct {
 	// Optional. Image URL of the page.
 	ImageUrl string `json:"image_url"`
 	// Optional. Content of the page.
-	Content string `json:"content"`
+	Content []Node `json:"content"`
 	// Number of page views for the page.
 	Views int64 `json:"views"`
 	// Optional. Only returned if access_token passed. True, if the target Telegraph account can edit the page.
@@ -100,4 +100,22 @@ type PageViewsOpts struct {
 	Day int64 `json:"day"`
 	// If passed, the number of page views for the requested hour will be returned.
 	Hour int64 `json:"hour"`
+}
+
+// Node is abstract object represents a DOM Node. It can be a String which represents a DOM text node or a
+// NodeElement object.
+type Node interface{}
+
+// NodeElement represents a DOM element node.
+type NodeElement struct {
+	// Name of the DOM element. Available tags: a, aside, b, blockquote, br, code, em, figcaption, figure,
+	// h3, h4, hr, i, iframe, img, li, ol, p, pre, s, strong, u, ul, video.
+	Tag string `json:"tag"`
+
+	// Attributes of the DOM element. Key of object represents name of attribute, value represents value
+	// of attribute. Available attributes: href, src.
+	Attrs map[string]string `json:"attrs,omitempty"`
+
+	// List of child nodes for the DOM element.
+	Children []Node `json:"children,omitempty"`
 }

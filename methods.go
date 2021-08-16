@@ -111,7 +111,15 @@ func CreatePage(accessToken string, title string, content string, opts *PageOpts
 	)
 	u.Add("access_token", accessToken)
 	u.Add("title", title)
-	u.Add("content", content)
+	cNode, err := ContentFormat(content)
+	if err != nil {
+		return nil, err
+	}
+	cNodeB, err := json.Marshal(cNode)
+	if err != nil {
+		return nil, err
+	}
+	u.Add("content", string(cNodeB))
 
 	if opts != nil {
 		u.Add("author_name", opts.AuthorName)
@@ -142,7 +150,15 @@ func EditPage(accessToken string, path string, title string, content string, opt
 	u.Add("access_token", accessToken)
 	u.Add("path", path)
 	u.Add("title", title)
-	u.Add("content", content)
+	cNode, err := ContentFormat(content)
+	if err != nil {
+		return nil, err
+	}
+	cNodeB, err := json.Marshal(cNode)
+	if err != nil {
+		return nil, err
+	}
+	u.Add("content", string(cNodeB))
 
 	if opts != nil {
 		u.Add("author_name", opts.AuthorName)
