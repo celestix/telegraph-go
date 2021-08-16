@@ -18,14 +18,14 @@ func main() {
 
 	// The Telegraph API uses a DOM-based format to represent the content of the page.
 	// https://telegra.ph/api#Content-format
-	_, err = a.CreatePage("Sample Page 1", `[{"tag":"h3", "children":["A Sample Page #1"]}, {"tag":"p", "children":["Hello world! This telegraph page is created using telegraph-go package."]}]`, &telegraph.PageOpts{
+	_, err = a.CreatePage("Sample", `<h3>Sample Page #1</h3> <p>Hello world! This telegraph page is created using telegraph-go package.</p><br><a href="https://github.com/anonyindian/telegraph-go">Click here to open package</a>`, &telegraph.PageOpts{
 		AuthorName: "User1",
 	})
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 
-	_, err = a.CreatePage("Sample Page 2", `[{"tag":"h3", "children":["A Sample Page #2"]}, {"tag":"p", "children":["Hello world! This telegraph page is created using telegraph-go package."]}]`, &telegraph.PageOpts{
+	_, err = a.CreatePage("Sample", `<h3>Sample Page #2</h3> <p>Hello world! This telegraph page is created using telegraph-go package.</p>`, &telegraph.PageOpts{
 		AuthorName: "User1",
 	})
 	if err != nil {
