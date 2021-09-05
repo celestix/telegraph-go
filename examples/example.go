@@ -42,4 +42,13 @@ func main() {
 	// Get total pages count in this way
 	pcount := plist.TotalCount
 	fmt.Println(pcount)
+
+	// Let's upload a photo on telegraph using UploadFile function, your file's path will be it's parameter
+	path, err := telegraph.UploadFile("telegraphAPI.jpg")
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+	// returned path is everything that comes after 'https://telegra.ph' in the url, for example in our case, returned path was '/file/a086583f5b7b25cd428fb.jpg' which can be viewed at 'https://telegra.ph/file/a086583f5b7b25cd428fb.jpg'
+	fmt.Println("Uploaded photo can be viewed at:", "https://telegra.ph"+path)
 }

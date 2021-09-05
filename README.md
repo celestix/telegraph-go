@@ -1,10 +1,12 @@
 # Telegraph API Go Package
 
-Telegra.ph is a minimalist publishing tool that allows you to create richly formatted posts and push them to the Web in just a click. Telegraph posts also get beautiful Instant View pages on Telegram. So, this Go wrapper enables you to do all that easily.
+![Telegraph API](https://telegra.ph/file/a086583f5b7b25cd428fb.jpg)
+*This photo was originally uploaded at [Telegraph](https://telegra.ph/api)*
 
-To maintain the purity of the basic interface, we launched the @Telegraph bot for those who require advanced features. This bot can help you manage your articles across any number of devices and get page view statistics for any Telegraph page.
+Telegra.ph is a minimalist publishing tool that allows you to create richly formatted posts to the Web.
+Telegraph posts also get beautiful Instant View pages on Telegram. So, this Go wrapper enables you to do all that easily.
 
-Anyone can enjoy the simplicity of Telegraph publishing, not just Telegram users. For this reason, all developers are welcome to use this Telegraph API to create bots like @Telegraph for any other platform, or even standalone interfaces.
+Anyone can enjoy the simplicity of Telegraph publishing, not just Telegram users. For this reason, all developers are welcome to use this Telegraph API to create bots like @Telegraph for any other platform, or even standalone interfaces and this package is to make their work easier.
 
 ## Getting started
 
