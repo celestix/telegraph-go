@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"net/url"
@@ -285,7 +284,50 @@ func UploadFile(filePath string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	b, err := ioutil.ReadAll(httpResponse.Body)
+	b, err := io.ReadAll(httpResponse.Body)
+	if err != nil {
+		return "", err
+	}
+	rUpload := make([]Upload, 0)
+	if err := json.Unmarshal(b, &rUpload); err != nil {
+		m := map[string]string{}
+		if err := json.Unmarshal(b, &m); err != nil {
+			return "", err
+		}
+		return "", fmt.Errorf("failed to upload: %s", m["error"])
+	}
+	return rUpload[0].Path, nil
+}
+
+// Use this method to upload a file to Telegraph.
+// (You can upload some specific file formats like .jpg, .jpeg, .png, .gif, etc only)
+// Returns a path to the uploaded file i.e. everything that comes after https://telegra.ph/
+// - filePath (type string): location of the file to upload to Telegraph.
+// https://telegra.ph/upload
+func UploadFileByBytes(content []byte) (string, error) {
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	part, err := writer.CreateFormField("file")
+	if err != nil {
+		return "", err
+	}
+	if _, err = io.Copy(part, bytes.NewReader(content)); err != nil {
+		return "", err
+	}
+	if err = writer.Close(); err != nil {
+		return "", err
+	}
+	request, err := http.NewRequest(http.MethodPost, "https://telegra.ph/upload", body)
+	if err != nil {
+		return "", err
+	}
+	request.Header.Set("Content-Type", writer.FormDataContentType())
+	var client http.Client
+	httpResponse, err := client.Do(request)
+	if err != nil {
+		return "", err
+	}
+	b, err := io.ReadAll(httpResponse.Body)
 	if err != nil {
 		return "", err
 	}
