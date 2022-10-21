@@ -2,6 +2,7 @@ package tests
 
 import (
 	"os"
+	"sync"
 	"testing"
 
 	"github.com/anonyindian/telegraph-go"
@@ -32,6 +33,32 @@ func TestUploadPhoto01(t *testing.T) {
 		t.Error("UploadPhoto returned empty path for photo02")
 		return
 	}
-	t.Log("UploadFile on photo01 returned:", path)
+	t.Log("UploadFile on photo02 returned:", path)
+}
 
+func TestUploadPhoto02(t *testing.T) {
+	for i := 0; i < 32; i++ {
+		TestUploadPhoto02(t)
+	}
+}
+
+func TestUploadPhotoWithWorkerPool(t *testing.T) {
+	worker := func(indexes chan int, wg *sync.WaitGroup) {
+		for range indexes {
+			TestUploadPhoto01(t)
+			wg.Done()
+		}
+	}
+	ch := make(chan int, 16)
+
+	var wg sync.WaitGroup
+	for i := 0; i < cap(ch); i++ {
+		go worker(ch, &wg)
+	}
+	for i := 1; i <= 64; i++ {
+		wg.Add(1)
+		ch <- i
+	}
+	wg.Wait()
+	close(ch)
 }
