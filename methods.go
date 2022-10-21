@@ -258,7 +258,7 @@ func GetViews(path string, opts *PageViewsOpts) (*PageViews, error) {
 // Returns a path to the uploaded file i.e. everything that comes after https://telegra.ph/
 // - filePath (type string): location of the file to upload to Telegraph.
 // https://telegra.ph/upload
-func UploadFile(filePath string) (path string, err error) {
+func UploadFile(filePath string) (string, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	file, err := os.Open(filePath)
