@@ -18,9 +18,10 @@ func TestUploadPhoto01(t *testing.T) {
 	}
 	t.Log("UploadFile on photo01 returned:", path)
 
-	photo02Content, err := os.ReadFile("data/photo02")
+	photo02Content, err := os.ReadFile("data/photo02.jpg")
 	if err != nil {
 		t.Error("Failed to load content of photo02:", err)
+		return
 	}
 
 	path, err = telegraph.UploadFileByBytes(photo02Content)

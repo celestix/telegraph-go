@@ -307,7 +307,7 @@ func UploadFile(filePath string) (string, error) {
 func UploadFileByBytes(content []byte) (string, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	part, err := writer.CreateFormFile("file", "the_file")
+	part, err := writer.CreateFormField("file")
 	if err != nil {
 		return "", err
 	}
