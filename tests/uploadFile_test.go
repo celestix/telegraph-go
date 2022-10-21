@@ -37,7 +37,7 @@ func TestUploadPhoto01(t *testing.T) {
 }
 
 func TestUploadPhoto02(t *testing.T) {
-	for i := 0; i < 32; i++ {
+	for i := 0; i < 2; i++ {
 		TestUploadPhoto01(t)
 	}
 }
@@ -49,13 +49,13 @@ func TestUploadPhotoWithWorkerPool(t *testing.T) {
 			wg.Done()
 		}
 	}
-	ch := make(chan int, 16)
+	ch := make(chan int, 2)
 
 	var wg sync.WaitGroup
 	for i := 0; i < cap(ch); i++ {
 		go worker(ch, &wg)
 	}
-	for i := 1; i <= 64; i++ {
+	for i := 1; i <= 4; i++ {
 		wg.Add(1)
 		ch <- i
 	}
