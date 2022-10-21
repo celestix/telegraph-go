@@ -38,7 +38,7 @@ func TestUploadPhoto01(t *testing.T) {
 
 func TestUploadPhoto02(t *testing.T) {
 	for i := 0; i < 32; i++ {
-		TestUploadPhoto02(t)
+		TestUploadPhoto01(t)
 	}
 }
 
