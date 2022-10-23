@@ -17,14 +17,13 @@ type Body struct {
 	Result json.RawMessage `json:"result"`
 }
 
-func Get(method string, params url.Values) (json.RawMessage, error) {
-	r, err := http.NewRequest("GET", "https://api.telegra.ph/"+method, nil)
+func InvokeRequest(method string, params url.Values) (json.RawMessage, error) {
+	r, err := http.NewRequest(http.MethodPost, "https://api.telegra.ph/"+method, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to build GET request to %s: %w", method, err)
 	}
 	r.URL.RawQuery = params.Encode()
-	var client http.Client
-	resp, err := client.Do(r)
+	resp, err := http.DefaultClient.Do(r)
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute GET request to %s: %w", method, err)
 	}

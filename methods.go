@@ -29,7 +29,7 @@ func CreateAccount(shortName string, opts *CreateAccountOpts) (*Account, error) 
 		u.Add("author_url", opts.AuthorUrl)
 	}
 
-	r, err := Get("createAccount", u)
+	r, err := InvokeRequest("createAccount", u)
 	if err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func EditAccountInfo(accessToken string, opts *EditAccountInfoOpts) (*Account, e
 		}
 	}
 
-	r, err := Get("editAccountInfo", u)
+	r, err := InvokeRequest("editAccountInfo", u)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func GetAccountInfo(accessToken string) (*Account, error) {
 	u.Add("access_token", accessToken)
 	u.Add("fields", `["short_name", "author_name", "author_url", "auth_url", "page_count"]`)
 
-	r, err := Get("getAccountInfo", u)
+	r, err := InvokeRequest("getAccountInfo", u)
 	if err != nil {
 		return nil, err
 	}
@@ -96,7 +96,7 @@ func RevokeAccessToken(accessToken string) (*Account, error) {
 	)
 	u.Add("access_token", accessToken)
 
-	r, err := Get("revokeAccessToken", u)
+	r, err := InvokeRequest("revokeAccessToken", u)
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +133,7 @@ func CreatePage(accessToken string, title string, content string, opts *PageOpts
 		u.Add("return_content", strconv.FormatBool(opts.ReturnContent))
 	}
 
-	r, err := Get("createPage", u)
+	r, err := InvokeRequest("createPage", u)
 	if err != nil {
 		return nil, err
 	}
@@ -172,7 +172,7 @@ func EditPage(accessToken string, path string, title string, content string, opt
 		u.Add("return_content", strconv.FormatBool(opts.ReturnContent))
 	}
 
-	r, err := Get("editPage", u)
+	r, err := InvokeRequest("editPage", u)
 	if err != nil {
 		return nil, err
 	}
@@ -192,7 +192,7 @@ func GetPage(path string, returnContent bool) (*Page, error) {
 	u.Add("path", path)
 	u.Add("return_content", strconv.FormatBool(returnContent))
 
-	r, err := Get("getPage", u)
+	r, err := InvokeRequest("getPage", u)
 	if err != nil {
 		return nil, err
 	}
@@ -219,7 +219,7 @@ func GetPageList(accessToken string, opts *PageListOpts) (*PageList, error) {
 		}
 	}
 
-	r, err := Get("getPageList", u)
+	r, err := InvokeRequest("getPageList", u)
 	if err != nil {
 		return nil, err
 	}
@@ -245,7 +245,7 @@ func GetViews(path string, opts *PageViewsOpts) (*PageViews, error) {
 		u.Add("hour", strconv.FormatInt(opts.Hour, 10))
 	}
 
-	r, err := Get("getViews", u)
+	r, err := InvokeRequest("getViews", u)
 	if err != nil {
 		return nil, err
 	}
@@ -279,8 +279,8 @@ func UploadFile(filePath string) (string, error) {
 		return "", err
 	}
 	request.Header.Set("Content-Type", writer.FormDataContentType())
-	var client http.Client
-	httpResponse, err := client.Do(request)
+
+	httpResponse, err := http.DefaultClient.Do(request)
 	if err != nil {
 		return "", err
 	}
@@ -322,8 +322,8 @@ func UploadFileByBytes(content []byte) (string, error) {
 		return "", err
 	}
 	request.Header.Set("Content-Type", writer.FormDataContentType())
-	var client http.Client
-	httpResponse, err := client.Do(request)
+
+	httpResponse, err := http.DefaultClient.Do(request)
 	if err != nil {
 		return "", err
 	}
