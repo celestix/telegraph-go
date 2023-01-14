@@ -282,7 +282,7 @@ func (c *TelegraphClient) UploadFile(filePath string) (string, error) {
 	}
 	request.Header.Set("Content-Type", writer.FormDataContentType())
 
-	httpResponse, err := http.DefaultClient.Do(request)
+	httpResponse, err := c.HttpClient.Do(request)
 	if err != nil {
 		return "", err
 	}
@@ -319,13 +319,14 @@ func (c *TelegraphClient) UploadFileByBytes(content []byte) (string, error) {
 	if err = writer.Close(); err != nil {
 		return "", err
 	}
+
 	request, err := http.NewRequest(http.MethodPost, "https://telegra.ph/upload", body)
 	if err != nil {
 		return "", err
 	}
 	request.Header.Set("Content-Type", writer.FormDataContentType())
 
-	httpResponse, err := http.DefaultClient.Do(request)
+	httpResponse, err := c.HttpClient.Do(request)
 	if err != nil {
 		return "", err
 	}

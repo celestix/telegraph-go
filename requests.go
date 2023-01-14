@@ -23,7 +23,8 @@ func (c *TelegraphClient) InvokeRequest(method string, params url.Values) (json.
 	if err != nil {
 		return nil, fmt.Errorf("failed to build POST request to %s: %w", method, err)
 	}
-	resp, err := http.DefaultClient.Do(r)
+
+	resp, err := c.HttpClient.Do(r)
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute POST request to %s: %w", method, err)
 	}
