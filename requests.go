@@ -28,7 +28,10 @@ func (c *TelegraphClient) InvokeRequest(method string, params url.Values) (json.
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute POST request to %s: %w", method, err)
 	}
-	defer resp.Body.Close()
+
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	var b Body
 	if err = json.NewDecoder(resp.Body).Decode(&b); err != nil {

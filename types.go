@@ -2,15 +2,18 @@ package telegraph
 
 import "net/http"
 
+// TelegraphClient is the client that contains all library methods implemented on it.
 type TelegraphClient struct {
+	// HttpClient is the http client used to send http requests to the Telegraph API.
 	HttpClient *http.Client
 }
 
+// ClientOpt is the options used to construct the TelegraphClient value.
 type ClientOpt struct {
 	HttpClient *http.Client
 }
 
-// This object represents a Telegraph account.
+// Account represents a Telegraph account.
 type Account struct {
 	// Account name, helps users with several accounts remember which they are currently using. Displayed to the user above the "Edit/Publish" button on Telegra.ph, other users don't see this name.
 	ShortName string `json:"short_name"`
@@ -26,7 +29,7 @@ type Account struct {
 	PageCount int64 `json:"page_count,omitempty"`
 }
 
-// Optional parameters for createAccount.
+// CreateAccountOpts is the optional parameters for createAccount.
 type CreateAccountOpts struct {
 	// Default author name used when creating new articles.
 	AuthorName string `json:"author_name,omitempty"`
@@ -34,7 +37,7 @@ type CreateAccountOpts struct {
 	AuthorUrl string `json:"author_url,omitempty"`
 }
 
-// Optional parameters for editAccountInfo.
+// EditAccountInfoOpts is the optional parameters for editAccountInfo.
 type EditAccountInfoOpts struct {
 	// Account name, helps users with several accounts remember which they are currently using. Displayed to the user above the "Edit/Publish" button on Telegra.ph, other users don't see this name.
 	ShortName string `json:"short_name,omitempty"`
@@ -44,7 +47,7 @@ type EditAccountInfoOpts struct {
 	AuthorUrl string `json:"author_url,omitempty"`
 }
 
-// This object represents a page on Telegraph.
+// Page object represents a page on Telegraph.
 type Page struct {
 	// Path to the page.
 	Path string `json:"path"`
@@ -68,7 +71,7 @@ type Page struct {
 	CanEdit bool `json:"can_edit,omitempty"`
 }
 
-// Optional parameters for getPage and editPage.
+// PageOpts is the optional parameters for getPage and editPage.
 type PageOpts struct {
 	// Optional. Name of the author, displayed below the title.
 	AuthorName string `json:"author_name,omitempty"`
@@ -78,7 +81,7 @@ type PageOpts struct {
 	ReturnContent bool `json:"return_content,omitempty"`
 }
 
-// This object represents a list of Telegraph articles belonging to an account. Most recently created articles first.
+// PageList object represents a list of Telegraph articles belonging to an account. Most recently created articles first.
 type PageList struct {
 	// Total number of pages belonging to the target Telegraph account.
 	TotalCount int64 `json:"total_count"`
@@ -86,7 +89,7 @@ type PageList struct {
 	Pages []Page `json:"pages"`
 }
 
-// Optional parameters for getPageList.
+// PageListOpts is the optional parameters for getPageList.
 type PageListOpts struct {
 	// - offset (type int64): Sequential number of the first page to be returned. (default = 0)
 	Offset int64 `json:"offset,omitempty"`
@@ -94,13 +97,13 @@ type PageListOpts struct {
 	Limit int64 `json:"limit,omitempty"`
 }
 
-// This object represents the number of page views for a Telegraph article.
+// PageViews object represents the number of page views for a Telegraph article.
 type PageViews struct {
 	// Number of page views for the target page.
 	Views int64 `json:"views"`
 }
 
-// Optional parameters for getViews.
+// PageViewsOpts is the optional parameters for getViews.
 type PageViewsOpts struct {
 	// Required if month is passed. If passed, the number of page views for the requested year will be returned.
 	Year int64 `json:"year,omitempty"`
@@ -130,7 +133,7 @@ type NodeElement struct {
 	Children []Node `json:"children,omitempty"`
 }
 
-// This object represents a path of uploaded file.
+// Upload object represents a path of uploaded file.
 type Upload struct {
 	// Path to the image.
 	Path string `json:"src"`

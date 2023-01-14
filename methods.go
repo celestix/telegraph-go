@@ -286,29 +286,8 @@ func (c *TelegraphClient) UploadFile(filePath string) (string, error) {
 	if err = writer.Close(); err != nil {
 		return "", err
 	}
-	request, err := http.NewRequest(http.MethodPost, "https://telegra.ph/upload", body)
-	if err != nil {
-		return "", err
-	}
-	request.Header.Set("Content-Type", writer.FormDataContentType())
 
-	httpResponse, err := c.HttpClient.Do(request)
-	if err != nil {
-		return "", err
-	}
-	b, err := io.ReadAll(httpResponse.Body)
-	if err != nil {
-		return "", err
-	}
-	rUpload := make([]Upload, 0)
-	if err := json.Unmarshal(b, &rUpload); err != nil {
-		m := map[string]string{}
-		if err := json.Unmarshal(b, &m); err != nil {
-			return "", err
-		}
-		return "", fmt.Errorf("failed to upload: %s", m["error"])
-	}
-	return rUpload[0].Path, nil
+	return c.doUploadFile(writer.FormDataContentType(), body)
 }
 
 // UploadFileByBytes uploads a file to Telegraph by bytes.
@@ -331,11 +310,21 @@ func (c *TelegraphClient) UploadFileByBytes(content []byte) (string, error) {
 		return "", err
 	}
 
+	return c.doUploadFile(writer.FormDataContentType(), body)
+}
+
+// UploadFileByBytes uploads a file to Telegraph by bytes.
+// Use this method to upload a file to Telegraph.
+// (You can upload some specific file formats like .jpg, .jpeg, .png, .gif, etc only)
+// Returns a path to the uploaded file i.e. everything that comes after https://telegra.ph/
+// - filePath (type string): location of the file to upload to Telegraph.
+// https://telegra.ph/upload
+func (c *TelegraphClient) doUploadFile(contentType string, body io.Reader) (string, error) {
 	request, err := http.NewRequest(http.MethodPost, "https://telegra.ph/upload", body)
 	if err != nil {
 		return "", err
 	}
-	request.Header.Set("Content-Type", writer.FormDataContentType())
+	request.Header.Set("Content-Type", contentType)
 
 	httpResponse, err := c.HttpClient.Do(request)
 	if err != nil {
@@ -347,7 +336,7 @@ func (c *TelegraphClient) UploadFileByBytes(content []byte) (string, error) {
 		return "", err
 	}
 
-	rUpload := []Upload{}
+	var rUpload []Upload
 	if err := json.Unmarshal(b, &rUpload); err != nil {
 		m := map[string]string{}
 		if err := json.Unmarshal(b, &m); err != nil {
