@@ -18,16 +18,20 @@ type Body struct {
 	Result json.RawMessage `json:"result"`
 }
 
-func InvokeRequest(method string, params url.Values) (json.RawMessage, error) {
+func (c *TelegraphClient) InvokeRequest(method string, params url.Values) (json.RawMessage, error) {
 	r, err := http.NewRequest(http.MethodPost, "https://api.telegra.ph/"+method, strings.NewReader(params.Encode()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to build POST request to %s: %w", method, err)
 	}
-	resp, err := http.DefaultClient.Do(r)
+
+	resp, err := c.HttpClient.Do(r)
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute POST request to %s: %w", method, err)
 	}
-	defer resp.Body.Close()
+
+	defer func() {
+		_ = resp.Body.Close()
+	}()
 
 	var b Body
 	if err = json.NewDecoder(resp.Body).Decode(&b); err != nil {

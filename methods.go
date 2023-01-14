@@ -12,12 +12,13 @@ import (
 	"strconv"
 )
 
+// CreateAccount creates a new account.
 // Use this method to create a new Telegraph account. Most users only need one account, but this can be useful for channel administrators who would like to keep individual author names and profile links for each of their channels.
 // On success, returns an Account object with the regular fields and an additional access_token field.
 // - shortName (type string): Account name, helps users with several accounts remember which they are currently using. Displayed to the user above the "Edit/Publish" button on Telegra.ph, other users don't see this name.
 // - opts (type CreateAccountOpts): All optional parameters.
 // https://telegra.ph/api#createAccount
-func CreateAccount(shortName string, opts *CreateAccountOpts) (*Account, error) {
+func (c *TelegraphClient) CreateAccount(shortName string, opts *CreateAccountOpts) (*Account, error) {
 	var (
 		u = url.Values{}
 		a Account
@@ -29,19 +30,20 @@ func CreateAccount(shortName string, opts *CreateAccountOpts) (*Account, error) 
 		u.Add("author_url", opts.AuthorUrl)
 	}
 
-	r, err := InvokeRequest("createAccount", u)
+	r, err := c.InvokeRequest("createAccount", u)
 	if err != nil {
 		return nil, err
 	}
 	return &a, json.Unmarshal(r, &a)
 }
 
+// EditAccountInfo edits certain information of an existing account.
 // Use this method to update information about a Telegraph account. Pass only the parameters that you want to edit.
 // On success, returns an Account object with the default fields.
 // - accessToken (type string): Access token of the Telegraph account.
 // - opts (type EditAccountInfoOpts): All optional parameters.
 // https://telegra.ph/api#editAccountInfo
-func EditAccountInfo(accessToken string, opts *EditAccountInfoOpts) (*Account, error) {
+func (c *TelegraphClient) EditAccountInfo(accessToken string, opts *EditAccountInfoOpts) (*Account, error) {
 	var (
 		u = url.Values{}
 		a Account
@@ -59,18 +61,19 @@ func EditAccountInfo(accessToken string, opts *EditAccountInfoOpts) (*Account, e
 		}
 	}
 
-	r, err := InvokeRequest("editAccountInfo", u)
+	r, err := c.InvokeRequest("editAccountInfo", u)
 	if err != nil {
 		return nil, err
 	}
 	return &a, json.Unmarshal(r, &a)
 }
 
+// GetAccountInfo returns account info of an existing account.
 // Use this method to get information about a Telegraph account.
 // Returns an Account object on success.
 // - accessToken (type string): Access token of the Telegraph account.
 // https://telegra.ph/api#getAccountInfo
-func GetAccountInfo(accessToken string) (*Account, error) {
+func (c *TelegraphClient) GetAccountInfo(accessToken string) (*Account, error) {
 	var (
 		u = url.Values{}
 		a Account
@@ -78,31 +81,33 @@ func GetAccountInfo(accessToken string) (*Account, error) {
 	u.Add("access_token", accessToken)
 	u.Add("fields", `["short_name", "author_name", "author_url", "auth_url", "page_count"]`)
 
-	r, err := InvokeRequest("getAccountInfo", u)
+	r, err := c.InvokeRequest("getAccountInfo", u)
 	if err != nil {
 		return nil, err
 	}
 	return &a, json.Unmarshal(r, &a)
 }
 
+// RevokeAccessToken revokes an existing access-token.
 // Use this method to revoke access_token and generate a new one, for example, if the user would like to reset all connected sessions, or you have reasons to believe the token was compromised.
 // On success, returns an Account object with new access_token and auth_url fields.
 // - accessToken (type string): Access token of the Telegraph account.
 // https://telegra.ph/api#revokeAccessToken
-func RevokeAccessToken(accessToken string) (*Account, error) {
+func (c *TelegraphClient) RevokeAccessToken(accessToken string) (*Account, error) {
 	var (
 		u = url.Values{}
 		a Account
 	)
 	u.Add("access_token", accessToken)
 
-	r, err := InvokeRequest("revokeAccessToken", u)
+	r, err := c.InvokeRequest("revokeAccessToken", u)
 	if err != nil {
 		return nil, err
 	}
 	return &a, json.Unmarshal(r, &a)
 }
 
+// CreatePage creates a new telegraph page.
 // Use this method to create a new Telegraph page.
 // On success, returns a Page object.
 // - accessToken (type string): Access token of the Telegraph account.
@@ -110,7 +115,7 @@ func RevokeAccessToken(accessToken string) (*Account, error) {
 // - content (type string): Content of the page (Array of Node, up to 64 KB converted into a json string).
 // - opts (type PageOpts): All optional parameters.
 // https://telegra.ph/api#createPage
-func CreatePage(accessToken string, title string, content string, opts *PageOpts) (*Page, error) {
+func (c *TelegraphClient) CreatePage(accessToken string, title string, content string, opts *PageOpts) (*Page, error) {
 	var (
 		u = url.Values{}
 		a Page
@@ -133,13 +138,14 @@ func CreatePage(accessToken string, title string, content string, opts *PageOpts
 		u.Add("return_content", strconv.FormatBool(opts.ReturnContent))
 	}
 
-	r, err := InvokeRequest("createPage", u)
+	r, err := c.InvokeRequest("createPage", u)
 	if err != nil {
 		return nil, err
 	}
 	return &a, json.Unmarshal(r, &a)
 }
 
+// EditPage edits an existing Telegraph page.
 // Use this method to edit an existing Telegraph page.
 // On success, returns a Page object.
 // - accessToken (type string): Access token of the Telegraph account.
@@ -148,7 +154,7 @@ func CreatePage(accessToken string, title string, content string, opts *PageOpts
 // - content (type string): Content of the page (Array of Node, up to 64 KB converted into a json string).
 // - opts (type PageOpts): All optional parameters.
 // https://telegra.ph/api#editPage
-func EditPage(accessToken string, path string, title string, content string, opts *PageOpts) (*Page, error) {
+func (c *TelegraphClient) EditPage(accessToken, path, title, content string, opts *PageOpts) (*Page, error) {
 	var (
 		u = url.Values{}
 		a Page
@@ -156,10 +162,12 @@ func EditPage(accessToken string, path string, title string, content string, opt
 	u.Add("access_token", accessToken)
 	u.Add("path", path)
 	u.Add("title", title)
+
 	cNode, err := ContentFormat(content)
 	if err != nil {
 		return nil, err
 	}
+
 	cNodeB, err := json.Marshal(cNode)
 	if err != nil {
 		return nil, err
@@ -172,19 +180,20 @@ func EditPage(accessToken string, path string, title string, content string, opt
 		u.Add("return_content", strconv.FormatBool(opts.ReturnContent))
 	}
 
-	r, err := InvokeRequest("editPage", u)
+	r, err := c.InvokeRequest("editPage", u)
 	if err != nil {
 		return nil, err
 	}
 	return &a, json.Unmarshal(r, &a)
 }
 
+// GetPage returns information of an existing Telegraph page.
 // Use this method to get a Telegraph page.
 // On success, returns a Page object.
 // - path (type string): Path to the Telegraph page (in the format Title-12-31, i.e. everything that comes after http://telegra.ph/).
 // - returnContent (type bool): If true, content field will be returned in Page object.
 // https://telegra.ph/api#getPage
-func GetPage(path string, returnContent bool) (*Page, error) {
+func (c *TelegraphClient) GetPage(path string, returnContent bool) (*Page, error) {
 	var (
 		u = url.Values{}
 		a Page
@@ -192,19 +201,20 @@ func GetPage(path string, returnContent bool) (*Page, error) {
 	u.Add("path", path)
 	u.Add("return_content", strconv.FormatBool(returnContent))
 
-	r, err := InvokeRequest("getPage", u)
+	r, err := c.InvokeRequest("getPage", u)
 	if err != nil {
 		return nil, err
 	}
 	return &a, json.Unmarshal(r, &a)
 }
 
+// GetPageList returns a list of pages.
 // Use this method to get a list of pages belonging to a Telegraph account.
 // Returns a PageList object, sorted by most recently created pages first.
 // - accessToken (type string): Access token of the Telegraph account.
 // - opts
 // https://telegra.ph/api#getPageList
-func GetPageList(accessToken string, opts *PageListOpts) (*PageList, error) {
+func (c *TelegraphClient) GetPageList(accessToken string, opts *PageListOpts) (*PageList, error) {
 	var (
 		u = url.Values{}
 		a PageList
@@ -219,19 +229,20 @@ func GetPageList(accessToken string, opts *PageListOpts) (*PageList, error) {
 		}
 	}
 
-	r, err := InvokeRequest("getPageList", u)
+	r, err := c.InvokeRequest("getPageList", u)
 	if err != nil {
 		return nil, err
 	}
 	return &a, json.Unmarshal(r, &a)
 }
 
+// GetViews returns views of an existing Telegraph article.
 // Use this method to get the number of views for a Telegraph article.
 // Returns a PageViews object on success. By default, the total number of page views will be returned.
 // - path (type string): Path to the Telegraph page (in the format Title-12-31, i.e. everything that comes after http://telegra.ph/).
 // - opts (type PageViewsOpts): All optional parameters.
 // https://telegra.ph/api#getViews
-func GetViews(path string, opts *PageViewsOpts) (*PageViews, error) {
+func (c *TelegraphClient) GetViews(path string, opts *PageViewsOpts) (*PageViews, error) {
 	var (
 		u = url.Values{}
 		a PageViews
@@ -245,19 +256,20 @@ func GetViews(path string, opts *PageViewsOpts) (*PageViews, error) {
 		u.Add("hour", strconv.FormatInt(opts.Hour, 10))
 	}
 
-	r, err := InvokeRequest("getViews", u)
+	r, err := c.InvokeRequest("getViews", u)
 	if err != nil {
 		return nil, err
 	}
 	return &a, json.Unmarshal(r, &a)
 }
 
+// UploadFile uploads a file to Telegraph.
 // Use this method to upload a file to Telegraph.
 // (You can upload some specific file formats like .jpg, .jpeg, .png, .gif, etc only)
 // Returns a path to the uploaded file i.e. everything that comes after https://telegra.ph/
 // - filePath (type string): location of the file to upload to Telegraph.
 // https://telegra.ph/upload
-func UploadFile(filePath string) (string, error) {
+func (c *TelegraphClient) UploadFile(filePath string) (string, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	file, err := os.Open(filePath)
@@ -274,37 +286,17 @@ func UploadFile(filePath string) (string, error) {
 	if err = writer.Close(); err != nil {
 		return "", err
 	}
-	request, err := http.NewRequest(http.MethodPost, "https://telegra.ph/upload", body)
-	if err != nil {
-		return "", err
-	}
-	request.Header.Set("Content-Type", writer.FormDataContentType())
 
-	httpResponse, err := http.DefaultClient.Do(request)
-	if err != nil {
-		return "", err
-	}
-	b, err := io.ReadAll(httpResponse.Body)
-	if err != nil {
-		return "", err
-	}
-	rUpload := make([]Upload, 0)
-	if err := json.Unmarshal(b, &rUpload); err != nil {
-		m := map[string]string{}
-		if err := json.Unmarshal(b, &m); err != nil {
-			return "", err
-		}
-		return "", fmt.Errorf("failed to upload: %s", m["error"])
-	}
-	return rUpload[0].Path, nil
+	return c.doUploadFile(writer.FormDataContentType(), body)
 }
 
+// UploadFileByBytes uploads a file to Telegraph by bytes.
 // Use this method to upload a file to Telegraph.
 // (You can upload some specific file formats like .jpg, .jpeg, .png, .gif, etc only)
 // Returns a path to the uploaded file i.e. everything that comes after https://telegra.ph/
 // - filePath (type string): location of the file to upload to Telegraph.
 // https://telegra.ph/upload
-func UploadFileByBytes(content []byte) (string, error) {
+func (c *TelegraphClient) UploadFileByBytes(content []byte) (string, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	part, err := writer.CreateFormFile("file", "file_name")
@@ -317,21 +309,34 @@ func UploadFileByBytes(content []byte) (string, error) {
 	if err = writer.Close(); err != nil {
 		return "", err
 	}
+
+	return c.doUploadFile(writer.FormDataContentType(), body)
+}
+
+// UploadFileByBytes uploads a file to Telegraph by bytes.
+// Use this method to upload a file to Telegraph.
+// (You can upload some specific file formats like .jpg, .jpeg, .png, .gif, etc only)
+// Returns a path to the uploaded file i.e. everything that comes after https://telegra.ph/
+// - filePath (type string): location of the file to upload to Telegraph.
+// https://telegra.ph/upload
+func (c *TelegraphClient) doUploadFile(contentType string, body io.Reader) (string, error) {
 	request, err := http.NewRequest(http.MethodPost, "https://telegra.ph/upload", body)
 	if err != nil {
 		return "", err
 	}
-	request.Header.Set("Content-Type", writer.FormDataContentType())
+	request.Header.Set("Content-Type", contentType)
 
-	httpResponse, err := http.DefaultClient.Do(request)
+	httpResponse, err := c.HttpClient.Do(request)
 	if err != nil {
 		return "", err
 	}
+
 	b, err := io.ReadAll(httpResponse.Body)
 	if err != nil {
 		return "", err
 	}
-	rUpload := make([]Upload, 0)
+
+	var rUpload []Upload
 	if err := json.Unmarshal(b, &rUpload); err != nil {
 		m := map[string]string{}
 		if err := json.Unmarshal(b, &m); err != nil {
@@ -339,5 +344,6 @@ func UploadFileByBytes(content []byte) (string, error) {
 		}
 		return "", fmt.Errorf("failed to upload: %s", m["error"])
 	}
+
 	return rUpload[0].Path, nil
 }
