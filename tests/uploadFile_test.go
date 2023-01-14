@@ -5,7 +5,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/anonyindian/telegraph-go"
+	"github.com/anonyindian/telegraph-go/v2"
 )
 
 func TestUploadPhoto01(t *testing.T) {

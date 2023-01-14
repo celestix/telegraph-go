@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/anonyindian/telegraph-go"
+	"github.com/anonyindian/telegraph-go/v2"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 
 	// The Telegraph API uses a DOM-based format to represent the content of the page.
 	// https://telegra.ph/api#Content-format
-	_, err = a.CreatePage(client, "Sample", `<h3>Sample Page #1</h3> <p>Hello world! This telegraph page is created using telegraph-go package.</p><br><a href="https://github.com/anonyindian/telegraph-go">Click here to open package</a>`, &telegraph.PageOpts{
+	_, err = a.CreatePage(client, "Sample", `<h3>Sample Page #1</h3> <p>Hello world! This telegraph page is created using telegraph-go package.</p><br><a href="https://github.com/anonyindian/telegraph-go/v2">Click here to open package</a>`, &telegraph.PageOpts{
 		AuthorName: "User1",
 	})
 	if err != nil {
