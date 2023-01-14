@@ -148,7 +148,7 @@ func CreatePage(accessToken string, title string, content string, opts *PageOpts
 // - content (type string): Content of the page (Array of Node, up to 64 KB converted into a json string).
 // - opts (type PageOpts): All optional parameters.
 // https://telegra.ph/api#editPage
-func EditPage(accessToken string, path string, title string, content string, opts *PageOpts) (*Page, error) {
+func EditPage(accessToken, path, title, content string, opts *PageOpts) (*Page, error) {
 	var (
 		u = url.Values{}
 		a Page
@@ -156,10 +156,12 @@ func EditPage(accessToken string, path string, title string, content string, opt
 	u.Add("access_token", accessToken)
 	u.Add("path", path)
 	u.Add("title", title)
+
 	cNode, err := ContentFormat(content)
 	if err != nil {
 		return nil, err
 	}
+
 	cNodeB, err := json.Marshal(cNode)
 	if err != nil {
 		return nil, err
@@ -327,11 +329,13 @@ func UploadFileByBytes(content []byte) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	b, err := io.ReadAll(httpResponse.Body)
 	if err != nil {
 		return "", err
 	}
-	rUpload := make([]Upload, 0)
+
+	rUpload := []Upload{}
 	if err := json.Unmarshal(b, &rUpload); err != nil {
 		m := map[string]string{}
 		if err := json.Unmarshal(b, &m); err != nil {
@@ -339,5 +343,6 @@ func UploadFileByBytes(content []byte) (string, error) {
 		}
 		return "", fmt.Errorf("failed to upload: %s", m["error"])
 	}
+
 	return rUpload[0].Path, nil
 }
