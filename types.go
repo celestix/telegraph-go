@@ -1,6 +1,8 @@
 package telegraph
 
-import "net/http"
+import (
+	"net/http"
+)
 
 // TelegraphClient is the client that contains all library methods implemented on it.
 type TelegraphClient struct {

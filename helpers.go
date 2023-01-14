@@ -1,7 +1,6 @@
 package telegraph
 
 import (
-	"fmt"
 	"net/http"
 )
 
@@ -46,7 +45,6 @@ func (a *Account) CreatePage(client *TelegraphClient, title, content string, opt
 
 // EditPage is a helper method to easily call EditPage by an account with previous author_name and author_url.
 func (a *Account) EditPage(client *TelegraphClient, path, title, content string, opts *PageOpts) (*Page, error) {
-	fmt.Println("Access Token:", a.AccessToken)
 	return client.EditPage(a.AccessToken, path, title, content, opts)
 }
 
