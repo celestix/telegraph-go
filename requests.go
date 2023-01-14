@@ -18,7 +18,7 @@ type Body struct {
 	Result json.RawMessage `json:"result"`
 }
 
-func InvokeRequest(method string, params url.Values) (json.RawMessage, error) {
+func (c *TelegraphClient) InvokeRequest(method string, params url.Values) (json.RawMessage, error) {
 	r, err := http.NewRequest(http.MethodPost, "https://api.telegra.ph/"+method, strings.NewReader(params.Encode()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to build POST request to %s: %w", method, err)

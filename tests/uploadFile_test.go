@@ -9,7 +9,9 @@ import (
 )
 
 func TestUploadPhoto01(t *testing.T) {
-	path, err := telegraph.UploadFile("data/photo01.jpg")
+	client := telegraph.GetTelegraphClient(nil)
+
+	path, err := client.UploadFile("data/photo01.jpg")
 	if err != nil {
 		t.Error("Failed to upload photo01 to telegraph:", err)
 		return
@@ -25,7 +27,7 @@ func TestUploadPhoto01(t *testing.T) {
 		return
 	}
 
-	path, err = telegraph.UploadFileByBytes(photo02Content)
+	path, err = client.UploadFileByBytes(photo02Content)
 	if err != nil {
 		t.Error("Failed to upload photo02 to telegraph:", err)
 		return

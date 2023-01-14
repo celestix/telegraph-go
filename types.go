@@ -1,5 +1,15 @@
 package telegraph
 
+import "net/http"
+
+type TelegraphClient struct {
+	HttpClient *http.Client
+}
+
+type ClientOpt struct {
+	HttpClient *http.Client
+}
+
 // This object represents a Telegraph account.
 type Account struct {
 	// Account name, helps users with several accounts remember which they are currently using. Displayed to the user above the "Edit/Publish" button on Telegra.ph, other users don't see this name.
@@ -109,7 +119,7 @@ type Node interface{}
 // NodeElement represents a DOM element node.
 type NodeElement struct {
 	// Name of the DOM element. Available tags: a, aside, b, blockquote, br, code, em, figcaption, figure,
-	// h3, h4, hr, i, iframe, img, li, ol, p, pre, s, strong, u, ul, video.
+	// h3, h4, hr, i, iframe, img, li, ol, p, pre, s, strong, u, ul, video.Client
 	Tag string `json:"tag"`
 
 	// Attributes of the DOM element. Key of object represents name of attribute, value represents value
