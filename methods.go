@@ -12,6 +12,7 @@ import (
 	"strconv"
 )
 
+// CreateAccount creates a new account.
 // Use this method to create a new Telegraph account. Most users only need one account, but this can be useful for channel administrators who would like to keep individual author names and profile links for each of their channels.
 // On success, returns an Account object with the regular fields and an additional access_token field.
 // - shortName (type string): Account name, helps users with several accounts remember which they are currently using. Displayed to the user above the "Edit/Publish" button on Telegra.ph, other users don't see this name.
@@ -36,6 +37,7 @@ func (c *TelegraphClient) CreateAccount(shortName string, opts *CreateAccountOpt
 	return &a, json.Unmarshal(r, &a)
 }
 
+// EditAccountInfo edits certain information of an existing account.
 // Use this method to update information about a Telegraph account. Pass only the parameters that you want to edit.
 // On success, returns an Account object with the default fields.
 // - accessToken (type string): Access token of the Telegraph account.
@@ -66,6 +68,7 @@ func (c *TelegraphClient) EditAccountInfo(accessToken string, opts *EditAccountI
 	return &a, json.Unmarshal(r, &a)
 }
 
+// GetAccountInfo returns account info of an existing account.
 // Use this method to get information about a Telegraph account.
 // Returns an Account object on success.
 // - accessToken (type string): Access token of the Telegraph account.
@@ -85,6 +88,7 @@ func (c *TelegraphClient) GetAccountInfo(accessToken string) (*Account, error) {
 	return &a, json.Unmarshal(r, &a)
 }
 
+// RevokeAccessToken revokes an existing access-token.
 // Use this method to revoke access_token and generate a new one, for example, if the user would like to reset all connected sessions, or you have reasons to believe the token was compromised.
 // On success, returns an Account object with new access_token and auth_url fields.
 // - accessToken (type string): Access token of the Telegraph account.
@@ -103,6 +107,7 @@ func (c *TelegraphClient) RevokeAccessToken(accessToken string) (*Account, error
 	return &a, json.Unmarshal(r, &a)
 }
 
+// CreatePage creates a new telegraph page.
 // Use this method to create a new Telegraph page.
 // On success, returns a Page object.
 // - accessToken (type string): Access token of the Telegraph account.
@@ -140,6 +145,7 @@ func (c *TelegraphClient) CreatePage(accessToken string, title string, content s
 	return &a, json.Unmarshal(r, &a)
 }
 
+// EditPage edits an existing Telegraph page.
 // Use this method to edit an existing Telegraph page.
 // On success, returns a Page object.
 // - accessToken (type string): Access token of the Telegraph account.
@@ -181,6 +187,7 @@ func (c *TelegraphClient) EditPage(accessToken, path, title, content string, opt
 	return &a, json.Unmarshal(r, &a)
 }
 
+// GetPage returns information of an existing Telegraph page.
 // Use this method to get a Telegraph page.
 // On success, returns a Page object.
 // - path (type string): Path to the Telegraph page (in the format Title-12-31, i.e. everything that comes after http://telegra.ph/).
@@ -201,6 +208,7 @@ func (c *TelegraphClient) GetPage(path string, returnContent bool) (*Page, error
 	return &a, json.Unmarshal(r, &a)
 }
 
+// GetPageList returns a list of pages.
 // Use this method to get a list of pages belonging to a Telegraph account.
 // Returns a PageList object, sorted by most recently created pages first.
 // - accessToken (type string): Access token of the Telegraph account.
@@ -228,6 +236,7 @@ func (c *TelegraphClient) GetPageList(accessToken string, opts *PageListOpts) (*
 	return &a, json.Unmarshal(r, &a)
 }
 
+// GetViews returns views of an existing Telegraph article.
 // Use this method to get the number of views for a Telegraph article.
 // Returns a PageViews object on success. By default, the total number of page views will be returned.
 // - path (type string): Path to the Telegraph page (in the format Title-12-31, i.e. everything that comes after http://telegra.ph/).
@@ -254,6 +263,7 @@ func (c *TelegraphClient) GetViews(path string, opts *PageViewsOpts) (*PageViews
 	return &a, json.Unmarshal(r, &a)
 }
 
+// UploadFile uploads a file to Telegraph.
 // Use this method to upload a file to Telegraph.
 // (You can upload some specific file formats like .jpg, .jpeg, .png, .gif, etc only)
 // Returns a path to the uploaded file i.e. everything that comes after https://telegra.ph/
@@ -301,6 +311,7 @@ func (c *TelegraphClient) UploadFile(filePath string) (string, error) {
 	return rUpload[0].Path, nil
 }
 
+// UploadFileByBytes uploads a file to Telegraph by bytes.
 // Use this method to upload a file to Telegraph.
 // (You can upload some specific file formats like .jpg, .jpeg, .png, .gif, etc only)
 // Returns a path to the uploaded file i.e. everything that comes after https://telegra.ph/
