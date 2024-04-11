@@ -7,19 +7,16 @@ import (
 // GetTelegraphClient returns a new TelegraphClient using the specified options.
 func GetTelegraphClient(options *ClientOpt) *TelegraphClient {
 	if options == nil {
-		options = GetDefaultOptions()
+		options = &ClientOpt{}
 	}
-
+	if options.HttpClient == nil {
+		options.HttpClient = http.DefaultClient
+	}
+	if options.ApiUrl == "" {
+		options.ApiUrl = "https://api.telegra.ph/"
+	}
 	return &TelegraphClient{
 		HttpClient: options.HttpClient,
-	}
-}
-
-// GetDefaultOptions returns the default-options used for constructing a
-// TelegraphClient.
-func GetDefaultOptions() *ClientOpt {
-	return &ClientOpt{
-		HttpClient: http.DefaultClient,
 	}
 }
 

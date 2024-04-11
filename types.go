@@ -6,12 +6,17 @@ import (
 
 // TelegraphClient is the client that contains all library methods implemented on it.
 type TelegraphClient struct {
+	// Api URL of the Telegraph API.
+	ApiUrl string
 	// HttpClient is the http client used to send http requests to the Telegraph API.
 	HttpClient *http.Client
 }
 
 // ClientOpt is the options used to construct the TelegraphClient value.
 type ClientOpt struct {
+	// Api URL of the Telegraph API.
+	ApiUrl string
+	// HttpClient is the http client used to send http requests to the Telegraph API.
 	HttpClient *http.Client
 }
 
