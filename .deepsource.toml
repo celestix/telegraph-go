@@ -5,7 +5,7 @@ name = "go"
 enabled = true
 
   [analyzers.meta]
-  import_root = "github.com/anonyindian/telegraph-go/v2"
+  import_root = "github.com/celestix/telegraph-go/v2"
 
 [[transformers]]
 name = "gofmt"

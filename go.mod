@@ -1,4 +1,4 @@
-module github.com/anonyindian/telegraph-go/v2
+module github.com/celestix/telegraph-go/v2
 
 go 1.18
 

@@ -13,7 +13,7 @@ Anyone can enjoy the simplicity of Telegraph publishing, not just Telegram users
 Download the library with the standard `go get` command:
 
 ```bash
-go get github.com/anonyindian/telegraph-go/v2
+go get github.com/celestix/telegraph-go/v2
 ```
 
 ### Example
@@ -21,8 +21,8 @@ go get github.com/anonyindian/telegraph-go/v2
 Examples can be found in the [examples directory](examples).
 
 ## Documentation
-[![GoDoc](https://godoc.org/github.com/anonyindian/telegraph-go/v2?status.svg)](http://godoc.org/github.com/anonyindian/telegraph-go/v2)
+[![GoDoc](https://godoc.org/github.com/celestix/telegraph-go/v2?status.svg)](http://godoc.org/github.com/celestix/telegraph-go/v2)
 
 Full `go doc` style documentation for the package can be viewed online without
 installing this package by using the GoDoc site here: 
-https://pkg.go.dev/github.com/anonyindian/telegraph-go/v2
+https://pkg.go.dev/github.com/celestix/telegraph-go/v2
