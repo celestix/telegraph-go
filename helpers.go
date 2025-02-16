@@ -17,6 +17,7 @@ func GetTelegraphClient(options *ClientOpt) *TelegraphClient {
 	}
 	return &TelegraphClient{
 		HttpClient: options.HttpClient,
+		ApiUrl:     options.ApiUrl,
 	}
 }
 
